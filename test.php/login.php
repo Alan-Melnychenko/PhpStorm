@@ -31,9 +31,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $result = $conn->query($query);
 
     if ($result->num_rows > 0) {
-        // Користувач існує, авторизація успішна
-        $_SESSION["email"] = $email;
-        echo "Авторизація успішна.";
+        // Отримання даних користувача
+        $row = $result->fetch_assoc();
+        $user_id = $row['id'];
+        $firstname = $row['firstname'];
+
+        // Перевірка ролі користувача (наприклад, чи він адміністратор)
+        // Якщо користувач - звичайний користувач, перенаправити на сторінку привітання
+        // В іншому випадку (наприклад, адміністратор), перенаправити на адміністративну панель
+        if ($row['role'] == 'user') {
+            $_SESSION["user_id"] = $user_id;
+            $_SESSION["firstname"] = $firstname;
+            header("Location: welcome.php");
+            exit;
+        } else {
+            $_SESSION["user_id"] = $user_id;
+            $_SESSION["firstname"] = $firstname;
+            header("Location: admin_panel.php");
+            exit;
+        }
     } else {
         echo "Помилка авторизації.";
     }

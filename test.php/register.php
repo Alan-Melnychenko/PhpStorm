@@ -25,6 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $lastname = clean_input($_POST["lastname"]);
     $email = clean_input($_POST["email"]);
     $password = clean_input($_POST["password"]);
+    $role = clean_input($_POST["role"]);
 
     // Масив для зберігання повідомлень про помилки
     $errors = array();
@@ -66,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "Даний користувач вже існує.";
         } else {
             // Вставка даних в таблицю users
-            $query = "INSERT INTO users (firstname, lastname, email, password) VALUES ('$firstname', '$lastname', '$email', '$password')";
+            $query = "INSERT INTO users (firstname, lastname, email, password, role) VALUES ('$firstname', '$lastname', '$email', '$password', '$role')";
 
             if ($conn->query($query) === TRUE) {
                 header("Location: success.php");
@@ -98,6 +99,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     Прізвище: <input type="text" name="lastname"><br>
     Електронна пошта: <input type="email" name="email"><br>
     Пароль: <input type="password" name="password"><br>
+    Роль:
+    <select name="role">
+        <option value="user">Звичайний користувач</option>
+        <option value="admin">Адміністратор</option>
+    </select><br>
     <input type="submit" value="Зареєструватися">
 </form>
 <p>Вже маєте обліковий запис? <a href="login.php">Увійти</a></p>
